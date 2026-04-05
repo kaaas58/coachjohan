@@ -662,7 +662,13 @@
       .testimonial-card { flex: 0 0 calc((100% - 1.5rem) / 2); }
     }
     @media (max-width: 560px) {
-      .testimonial-card { flex: 0 0 100%; }
+      .testimonial-card {
+        flex: 0 0 100%;
+        font-size: .83rem;
+        padding: 1.66rem;
+      }
+      .testimonial-stars { font-size: .83rem; }
+      .testimonial-avatar { width: 37px; height: 37px; font-size: .79rem; }
     }
     .testimonial-stars { color: var(--yellow); font-size: 1rem; letter-spacing: .1em; }
     .testimonial-text { font-size: .97rem; color: var(--text); line-height: 1.7; font-style: italic; flex: 1; }
@@ -1223,8 +1229,8 @@
 <div class="footer-links">
           <h4>Rechtliches</h4>
           <ul>
-            <li><a href="/datenschutz">Datenschutz</a></li>
-            <li><a href="/impressum">Impressum</a></li>
+            <li><a href="legal.html#datenschutz">Datenschutz</a></li>
+            <li><a href="legal.html#impressum">Impressum</a></li>
           </ul>
         </div>
       </div>
