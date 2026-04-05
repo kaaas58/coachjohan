@@ -50,7 +50,7 @@
       --shadow-lg: 0 12px 48px rgba(0,0,0,.7);
     }
     html.dark body       { background: #0F0F1A; }
-    html.dark nav        { background: rgba(15,15,26,.96); border-bottom-color: #2A2A44; }
+    html.dark nav        { background: rgba(15,15,26,.30); border-bottom-color: rgba(42,42,68,.4); }
     html.dark .nav-logo  { color: #EEEAF4; }
     html.dark .nav-links a { color: #EEEAF4; }
     html.dark .nav-links a:hover { color: var(--orange); }
@@ -61,7 +61,7 @@
     html.dark .mobile-menu a { color: #EEEAF4; border-bottom-color: #2A2A44; }
     html.dark .hero      { background:
       linear-gradient(105deg, rgba(5,4,2,.82) 0%, rgba(15,8,2,.65) 45%, rgba(5,4,2,.28) 100%),
-      url('images/bg.png') center center / cover no-repeat; }
+      url('images/bg.jpg') center center / cover no-repeat; }
     html.dark .hero-badge { background: #1A1A2E; border-color: var(--yellow); color: #EEEAF4; }
     html.dark .hero-quote { background: #1A1A2E; }
     html.dark .problem-item { background: #1A1A2E; border-color: #2A2A44; }
@@ -153,10 +153,10 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 1000;
-      background: rgba(255,255,255,.92);
+      background: rgba(255,255,255,.30);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid rgba(240,237,232,.4);
       transition: box-shadow .3s;
     }
     nav.scrolled { box-shadow: var(--shadow); }
@@ -287,7 +287,7 @@
           rgba(10,8,5,.72) 0%,
           rgba(26,14,5,.55) 45%,
           rgba(10,8,5,.18) 100%),
-        url('images/bg.png') center center / cover no-repeat;
+        url('images/bg.jpg') center center / cover no-repeat;
       position: relative;
       overflow: hidden;
     }
@@ -320,8 +320,8 @@
     }
     .hero-badge i { color: var(--yellow); font-size: 1rem; }
 
-    .hero-title { margin-bottom: 1.2rem; color: #fff; }
-    .hero-title .name { color: var(--yellow); }
+    .hero-title { margin-bottom: 1.2rem; color: rgba(255,255,255,.4); }
+    .hero-title .name { color: rgba(255,215,64,.4); }
 
     .hero-desc {
       font-size: 1.15rem;
@@ -901,10 +901,7 @@
   <nav id="navbar">
     <div style="max-width:100%; padding-inline:clamp(1.5rem,5vw,4rem);">
       <div class="nav-inner">
-        <a href="#" class="nav-logo" id="logo-toggle">
-          ADHS COACH JOHANN
-          <span>Dein Weg zu Klarheit &amp; Struktur</span>
-        </a>
+        <a href="#" class="nav-logo" id="logo-toggle">ADHS Coach Johann</a>
 
         <ul class="nav-links">
           <li><a href="#kennst-du-das">Kennst du das?</a></li>
@@ -1074,7 +1071,7 @@
     <div class="container">
       <div class="about-grid">
         <div class="about-image">
-          <img src="images/me.png" alt="Johannes – ADHS Coach" />
+          <img src="images/me.jpg" alt="Johannes – ADHS Coach" />
           <div class="about-badge">
             <div class="years">9+</div>
             <div class="label">Jahre Erfahrung</div>
