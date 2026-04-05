@@ -710,6 +710,94 @@
     .testimonials-cta { text-align: center; margin-top: 3.5rem; }
     .testimonials-cta p { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; }
 
+    /* ── Modals ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 3000;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity .25s, visibility .25s;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2.25rem 2.5rem 2.5rem;
+      width: 100%; max-width: 500px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.3);
+      position: relative;
+      transform: translateY(24px) scale(.98);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      max-height: 92vh; overflow-y: auto;
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1.25rem;
+      background: none; border: none; cursor: pointer;
+      font-size: 1.4rem; color: var(--text-muted);
+      line-height: 1; transition: color .2s, transform .2s;
+    }
+    .modal-close:hover { color: var(--orange); transform: rotate(90deg); }
+    .modal h2 { font-size: 1.35rem; margin-bottom: .35rem; }
+    .modal .modal-sub { color: var(--text-muted); font-size: .9rem; margin-bottom: 1.75rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: .88rem; font-weight: 600; margin-bottom: .4rem; color: var(--text); }
+    .form-group input[type=text],
+    .form-group input[type=email],
+    .form-group textarea {
+      width: 100%; padding: .75em 1em;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      font-family: inherit; font-size: .97rem; color: var(--text);
+      background: var(--white);
+      transition: border-color .2s, box-shadow .2s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none; border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255,107,53,.12);
+    }
+    .form-group textarea { min-height: 110px; }
+    .radio-group { display: flex; flex-direction: column; gap: .6rem; }
+    .radio-label {
+      display: flex; align-items: center; gap: .75rem;
+      cursor: pointer; font-size: .95rem; color: var(--text);
+      padding: .65em 1em;
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      transition: border-color .2s, background .2s;
+    }
+    .radio-label:hover { border-color: var(--orange); background: var(--orange-lt); }
+    .radio-label input[type=radio] { accent-color: var(--orange); width: 16px; height: 16px; }
+    .radio-label.selected { border-color: var(--orange); background: var(--orange-lt); font-weight: 600; }
+    .form-submit-btn {
+      width: 100%; margin-top: 1.5rem;
+      padding: .9em 1.5em; border-radius: 50px;
+      background: var(--orange); color: #fff;
+      font-size: 1rem; font-weight: 700; border: none; cursor: pointer;
+      box-shadow: 0 4px 18px rgba(255,107,53,.35);
+      transition: transform .15s, box-shadow .15s, opacity .2s;
+    }
+    .form-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,53,.4); }
+    .form-submit-btn:disabled { opacity: .6; cursor: default; transform: none; }
+    .form-success {
+      text-align: center; padding: 1rem 0;
+      display: none; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .form-success.show { display: flex; }
+    .form-success i { font-size: 3rem; color: var(--teal); }
+    .form-success h3 { font-size: 1.2rem; }
+    .form-success p { color: var(--text-muted); font-size: .95rem; }
+
+    html.dark .modal { background: #1A1A2E; }
+    html.dark .form-group input,
+    html.dark .form-group textarea { background: #0F0F1A; border-color: #2A2A44; color: #EEEAF4; }
+    html.dark .radio-label { border-color: #2A2A44; color: #EEEAF4; }
+    html.dark .radio-label:hover,
+    html.dark .radio-label.selected { background: rgba(255,107,53,.12); border-color: var(--orange); }
+
     /* ── CTA Banner ── */
     .cta-banner {
       padding: clamp(4rem,8vw,6rem) 0;
@@ -822,7 +910,7 @@
           <li><a href="#testimonials">Bewertungen</a></li>
         </ul>
 
-        <a href="#erstgespraech" class="nav-cta">Erstgespräch</a>
+        <a href="#" onclick="openModal('erstgespraech');return false;" class="nav-cta">Erstgespräch</a>
 
         <button class="burger" id="burger" aria-label="Menü öffnen">
           <span></span><span></span><span></span>
@@ -838,7 +926,7 @@
         <a href="#ueber-mich" class="mobile-link">Über mich</a>
         <a href="#angebote" class="mobile-link">Angebote</a>
         <a href="#testimonials" class="mobile-link">Bewertungen</a>
-        <a href="#erstgespraech" class="btn btn--primary">Erstgespräch vereinbaren</a>
+        <a href="#" onclick="openModal('erstgespraech');return false;" class="btn btn--primary">Erstgespräch vereinbaren</a>
       </div>
     </div>
   </nav>
@@ -868,7 +956,7 @@
       </p>
 
       <div class="hero-actions">
-        <a href="#erstgespraech" class="btn btn--primary btn--lg">
+        <a href="#" onclick="openModal('erstgespraech');return false;" class="btn btn--primary btn--lg">
           <i class="fa-solid fa-calendar-check"></i>
           Erstgespräch vereinbaren
         </a>
@@ -927,7 +1015,7 @@
 
       <div class="problems-cta">
         <p>Du willst Veränderung – ich weiß, wie es geht. 💡</p>
-        <a href="#erstgespraech" class="btn btn--primary btn--lg">
+        <a href="#" onclick="openModal('erstgespraech');return false;" class="btn btn--primary btn--lg">
           <i class="fa-solid fa-calendar-check"></i>
           Erstgespräch – kostenlos &amp; unverbindlich
         </a>
@@ -1075,7 +1163,7 @@
               <li><i class="fa-solid fa-check"></i> Telefon, Videocall oder Sprachnachrichten</li>
               <li><i class="fa-solid fa-check"></i> Flexible Stundenabrechnung</li>
             </ul>
-            <a href="#erstgespraech" class="btn btn--primary" style="justify-content:center;">Anfragen</a>
+            <button onclick="openModal('angebot','coaching11')" class="btn btn--primary" style="justify-content:center;width:100%;">Anfragen</button>
           </div>
         </div>
 
@@ -1095,7 +1183,7 @@
               <li><i class="fa-solid fa-check"></i> Videokurs: Von der Couchpotato zur Maschine</li>
               <li><i class="fa-solid fa-check"></i> Erweiterbar auf 1-Jahres-Kurs</li>
             </ul>
-            <a href="#erstgespraech" class="btn btn--yellow" style="justify-content:center; color:var(--navy);">Jetzt starten</a>
+            <button onclick="openModal('angebot','wochen12')" class="btn btn--yellow" style="justify-content:center;width:100%;color:var(--navy);">Jetzt starten</button>
           </div>
         </div>
 
@@ -1113,7 +1201,7 @@
               <li><i class="fa-solid fa-check"></i> Unterkunft im selben Haus möglich</li>
               <li><i class="fa-solid fa-check"></i> Flughafenabholung inklusive</li>
             </ul>
-            <a href="#erstgespraech" class="btn btn--primary" style="justify-content:center;">Mehr erfahren</a>
+            <button onclick="openModal('angebot','retreat')" class="btn btn--primary" style="justify-content:center;width:100%;">Anfragen</button>
           </div>
         </div>
 
@@ -1200,7 +1288,7 @@
       <!-- CTA unter Testimonials -->
       <div class="testimonials-cta" id="erstgespraech">
         <p>Bereit, deinen eigenen Weg zu gehen?</p>
-        <a href="mailto:info@adhscoach.org" class="btn btn--primary btn--lg">
+        <a href="#" onclick="openModal('erstgespraech');return false;" class="btn btn--primary btn--lg">
           <i class="fa-solid fa-calendar-check"></i>
           Jetzt Erstgespräch vereinbaren
         </a>
@@ -1245,7 +1333,176 @@
     </div>
   </footer>
 
+  <!-- ══ MODAL: ANGEBOT ══ -->
+  <div class="modal-overlay" id="modal-angebot" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('angebot')" aria-label="Schließen">&times;</button>
+      <h2>Jetzt anfragen</h2>
+      <p class="modal-sub">Ich melde mich in der Regel innerhalb von 24h bei dir.</p>
+
+      <form id="form-angebot" onsubmit="submitForm(event,'angebot')">
+        <input type="hidden" name="_subject" value="Neue Anfrage – ADHS Coach Johann">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <div class="form-group">
+          <label for="angebot-name">Name</label>
+          <input type="text" id="angebot-name" name="name" placeholder="Dein Name" required>
+        </div>
+        <div class="form-group">
+          <label for="angebot-email">E-Mail</label>
+          <input type="email" id="angebot-email" name="email" placeholder="deine@email.de" required>
+        </div>
+        <div class="form-group">
+          <label>Ich interessiere mich für</label>
+          <div class="radio-group">
+            <label class="radio-label" id="rl-coaching11">
+              <input type="radio" name="angebot" value="1:1 Coaching"> 1:1 Coaching
+            </label>
+            <label class="radio-label" id="rl-wochen12">
+              <input type="radio" name="angebot" value="12-Wochen Fundamentals"> 12-Wochen Fundamentals
+            </label>
+            <label class="radio-label" id="rl-retreat">
+              <input type="radio" name="angebot" value="Coaching-Retreat Rio"> Coaching-Retreat Rio
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="angebot-msg">Nachricht</label>
+          <textarea id="angebot-msg" name="nachricht" placeholder="Erzähl mir kurz, wo du gerade stehst…"></textarea>
+        </div>
+        <button type="submit" class="form-submit-btn">
+          <i class="fa-solid fa-paper-plane"></i> Anfrage senden
+        </button>
+      </form>
+
+      <div class="form-success" id="success-angebot">
+        <i class="fa-solid fa-circle-check"></i>
+        <h3>Nachricht gesendet!</h3>
+        <p>Danke – ich melde mich bald bei dir.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: ERSTGESPRÄCH ══ -->
+  <div class="modal-overlay" id="modal-erstgespraech" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('erstgespraech')" aria-label="Schließen">&times;</button>
+      <h2>Erstgespräch vereinbaren</h2>
+      <p class="modal-sub">Kostenlos &amp; unverbindlich – ich freue mich auf dich.</p>
+
+      <form id="form-erstgespraech" onsubmit="submitForm(event,'erstgespraech')">
+        <input type="hidden" name="_subject" value="Erstgespräch-Anfrage – ADHS Coach Johann">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <div class="form-group">
+          <label for="eg-name">Name</label>
+          <input type="text" id="eg-name" name="name" placeholder="Dein Name" required>
+        </div>
+        <div class="form-group">
+          <label for="eg-email">E-Mail</label>
+          <input type="email" id="eg-email" name="email" placeholder="deine@email.de" required>
+        </div>
+        <div class="form-group">
+          <label for="eg-msg">Was bewegt dich gerade? <span style="font-weight:400;color:var(--text-muted)">(optional)</span></label>
+          <textarea id="eg-msg" name="nachricht" placeholder="Erzähl mir kurz von dir…"></textarea>
+        </div>
+        <button type="submit" class="form-submit-btn">
+          <i class="fa-solid fa-calendar-check"></i> Termin anfragen
+        </button>
+      </form>
+
+      <div class="form-success" id="success-erstgespraech">
+        <i class="fa-solid fa-circle-check"></i>
+        <h3>Nachricht gesendet!</h3>
+        <p>Ich melde mich innerhalb von 24h bei dir.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // ── Modals ──
+    const FORMSUBMIT_URL = 'https://formsubmit.co/ajax/johannes.litty@gmail.com';
+
+    const radioMap = {
+      coaching11: 'rl-coaching11',
+      wochen12:   'rl-wochen12',
+      retreat:    'rl-retreat'
+    };
+
+    function openModal(type, preselect) {
+      const overlay = document.getElementById('modal-' + type);
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      if (type === 'angebot' && preselect) {
+        // clear all, select the right one
+        document.querySelectorAll('.radio-label').forEach(l => l.classList.remove('selected'));
+        const labelId = radioMap[preselect];
+        const lbl = document.getElementById(labelId);
+        if (lbl) {
+          lbl.classList.add('selected');
+          lbl.querySelector('input').checked = true;
+        }
+      }
+    }
+
+    function closeModal(type) {
+      document.getElementById('modal-' + type).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close on backdrop click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) closeModal(overlay.id.replace('modal-', ''));
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(o => {
+          closeModal(o.id.replace('modal-', ''));
+        });
+      }
+    });
+
+    // Highlight radio on click
+    document.querySelectorAll('.radio-label').forEach(lbl => {
+      lbl.addEventListener('click', () => {
+        document.querySelectorAll('.radio-label').forEach(l => l.classList.remove('selected'));
+        lbl.classList.add('selected');
+      });
+    });
+
+    async function submitForm(e, type) {
+      e.preventDefault();
+      const form = document.getElementById('form-' + type);
+      const btn  = form.querySelector('.form-submit-btn');
+      btn.disabled = true;
+      btn.textContent = 'Wird gesendet…';
+
+      try {
+        const res = await fetch(FORMSUBMIT_URL, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('success-' + type).classList.add('show');
+          setTimeout(() => closeModal(type), 3000);
+        } else {
+          throw new Error();
+        }
+      } catch {
+        btn.disabled = false;
+        btn.textContent = 'Fehler – nochmal versuchen';
+      }
+    }
+
     // ── Dark Mode ──
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon   = document.getElementById('theme-icon');
