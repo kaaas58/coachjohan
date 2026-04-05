@@ -180,6 +180,8 @@
     }
     .nav-logo span { display: block; font-size: .75rem; font-weight: 600; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; }
     @media (max-width: 700px) { .nav-logo span { display: none; } }
+    .btn-short { display: none; }
+    @media (max-width: 500px) { .btn-long { display: none; } .btn-short { display: inline; } }
 
     .nav-links {
       display: flex;
@@ -1017,7 +1019,7 @@
         <p>Du willst Veränderung – ich weiß, wie es geht. 💡</p>
         <a href="#" onclick="openModal('erstgespraech');return false;" class="btn btn--primary btn--lg">
           <i class="fa-solid fa-calendar-check"></i>
-          Erstgespräch – kostenlos &amp; unverbindlich
+          <span class="btn-long">Erstgespräch – kostenlos &amp; unverbindlich</span><span class="btn-short">Erstgespräch</span>
         </a>
       </div>
     </div>
