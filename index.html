@@ -669,6 +669,15 @@
       .testimonial-card { flex: 0 0 90%; height: 230px; }
       .testimonial-card.flipped { height: 276px; }
     }
+    @media (max-width: 340px) {
+      .testimonial-card { flex: 0 0 94%; height: 220px; }
+      .testimonial-card.flipped { height: 264px; }
+      .tc-front, .tc-back { padding: 1rem 1.1rem; }
+      .tc-text { font-size: .82rem; }
+      .tc-back-text { font-size: .8rem; }
+      .tc-name { font-size: .78rem; }
+      .tc-avatar { width: 30px; height: 30px; font-size: .75rem; }
+    }
 
     .tc-inner {
       position: relative;
@@ -751,6 +760,10 @@
     .tc-back-scroll::-webkit-scrollbar { width: 6px; }
     .tc-back-scroll::-webkit-scrollbar-track { background: rgba(255,107,53,.1); border-radius: 3px; }
     .tc-back-scroll::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+    @media (max-width: 560px) {
+      .tc-back-scroll::-webkit-scrollbar-track { background: rgba(255,107,53,.18); }
+      .tc-back-scroll { scrollbar-color: var(--orange) rgba(255,107,53,.18); }
+    }
     .tc-back-text {
       font-size: .88rem; line-height: 1.65;
       color: var(--text); font-style: italic;
@@ -1797,16 +1810,22 @@ Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und 
 
       const GAP = 24;
 
-      function cardW() {
-        const n = visibleCount();
-        return (wrapper.offsetWidth - GAP * (n - 1)) / n;
+      function step() {
+        const card = track.querySelector('.testimonial-card');
+        return card ? card.getBoundingClientRect().width + GAP : (wrapper.offsetWidth / visibleCount());
       }
 
-      function step() { return cardW() + GAP; }
+      function centerOffset() {
+        const card = track.querySelector('.testimonial-card');
+        if (!card) return 0;
+        const n = visibleCount();
+        const totalVisible = card.getBoundingClientRect().width * n + GAP * (n - 1);
+        return Math.max(0, (wrapper.offsetWidth - totalVisible) / 2);
+      }
 
       function moveTo(i, animate) {
         track.style.transition = animate ? 'transform .45s cubic-bezier(.4,0,.2,1)' : 'none';
-        track.style.transform  = `translateX(-${i * step()}px)`;
+        track.style.transform  = `translateX(${centerOffset() - i * step()}px)`;
         idx = i;
       }
 
