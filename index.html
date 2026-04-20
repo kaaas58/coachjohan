@@ -418,7 +418,7 @@
       border: 1.5px solid var(--border);
       transition: border-color .2s, transform .2s;
     }
-    .problem-item:hover { border-color: var(--yellow); transform: translateY(-2px); }
+    .problem-item:hover { border-color: var(--border); transform: none; }
     .problem-icon {
       font-size: 1.4rem;
       width: 1.8rem;
@@ -452,7 +452,7 @@
       box-shadow: var(--shadow);
       transition: transform .2s, box-shadow .2s;
     }
-    .vision-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .vision-card:hover { transform: none; box-shadow: var(--shadow); }
     .vision-icon {
       width: 60px; height: 60px;
       border-radius: 50%;
@@ -470,11 +470,27 @@
     /* ── About ── */
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
-      max-width: 680px;
-      margin-inline: auto;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
     }
+    .about-image--desktop { display: block; position: relative; overflow: hidden; border-radius: var(--radius); }
+    .about-image--desktop img {
+      width: 100%;
+      border-radius: var(--radius);
+      object-fit: cover;
+      max-height: 560px;
+    }
+    .about-image--desktop .about-badge--inline {
+      position: absolute;
+      top: 1rem;
+      bottom: auto;
+      right: 1rem;
+      padding: .75rem 1.1rem;
+    }
+    .about-image--desktop .about-badge--inline .years { font-size: 1.55rem; }
+    .about-image--desktop .about-badge--inline .label { font-size: .68rem; }
+    .about-image--inline { display: none; }
     .about-image--inline {
       position: relative;
       margin-top: 1.25rem;
@@ -1060,7 +1076,9 @@
       .hero-title { font-size: 2.4rem; }
       .hero-desc { font-size: 1rem; }
 
-      .about-grid { gap: 0; }
+      .about-grid { grid-template-columns: 1fr; gap: 0; max-width: 680px; margin-inline: auto; }
+      .about-image--desktop { display: none; }
+      .about-image--inline { display: block; }
 
       .steps-grid { grid-template-columns: 1fr; }
       .steps-grid::before { display: none; }
@@ -1260,9 +1278,21 @@
   <section class="section section--alt" id="ueber-mich">
     <div class="container">
       <div class="about-grid">
+
+        <!-- Bild Desktop (linke Spalte) -->
+        <div class="about-image about-image--desktop">
+          <img src="images/me.jpg" alt="Johannes – ADHS Coach" />
+          <div class="about-badge about-badge--inline">
+            <div class="years">9+</div>
+            <div class="label">Jahre Erfahrung</div>
+          </div>
+        </div>
+
         <div class="about-text">
           <span class="section-label">Hallo, ich bin Johannes</span>
           <h2>Ein Coach, der selbst weiß, wie sich ADHS anfühlt.</h2>
+
+          <!-- Bild Mobile (im Textfluss) -->
           <div class="about-image about-image--inline">
             <img src="images/me.jpg" alt="Johannes – ADHS Coach" />
             <div class="about-badge about-badge--inline">
@@ -2046,12 +2076,10 @@ Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und 
     // ── Logo: scroll to footer / back to top ──
     document.getElementById('logo-toggle').addEventListener('click', e => {
       e.preventDefault();
-      const footer = document.getElementById('site-footer');
-      const inFooter = window.scrollY + window.innerHeight >= footer.offsetTop + 60;
-      if (inFooter) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.scrollY < 60) {
+        document.getElementById('site-footer').scrollIntoView({ behavior: 'smooth' });
       } else {
-        footer.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
 
