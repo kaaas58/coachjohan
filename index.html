@@ -470,18 +470,36 @@
     /* ── About ── */
     .about-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
+      grid-template-columns: 1fr;
+      gap: 0;
+      max-width: 680px;
+      margin-inline: auto;
     }
-    .about-image {
+    .about-image--inline {
       position: relative;
+      margin-top: 1.25rem;
+      border-radius: var(--radius);
+      overflow: hidden;
     }
-    .about-image img {
+    .about-image--inline img {
       width: 100%;
       border-radius: var(--radius);
       object-fit: cover;
-      max-height: 560px;
+      max-height: 320px;
+      object-position: top center;
+      display: block;
+    }
+    .about-image--inline .about-badge--inline {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      margin: 0;
+      flex-direction: column;
+      gap: .2rem;
+      padding: .5rem .72rem;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg);
+      opacity: .8;
     }
     .about-image .img-placeholder {
       width: 100%;
@@ -494,24 +512,25 @@
       color: rgba(255,255,255,.6);
       font-size: 5rem;
     }
-    .about-image .about-badge {
-      position: absolute;
-      bottom: -1.5rem;
-      right: -1.5rem;
+    .about-badge--inline {
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
       background: var(--orange);
       color: var(--white);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.5rem;
-      text-align: center;
-      box-shadow: var(--shadow-lg);
-      min-width: 130px;
+      border-radius: var(--radius-sm);
+      padding: .7rem 1.2rem;
+      box-shadow: var(--shadow);
+      margin-top: .75rem;
+      margin-bottom: .25rem;
     }
-    .about-badge .years { font-size: 2.5rem; font-weight: 900; line-height: 1; }
-    .about-badge .label { font-size: .75rem; font-weight: 600; opacity: .9; }
+    .about-badge--inline .years { font-size: 1.16rem; font-weight: 900; line-height: 1; }
+    .about-badge--inline .label { font-size: .52rem; font-weight: 600; opacity: .9; }
 
     .about-text .section-label { margin-bottom: 1rem; }
     .about-text h2 { margin-bottom: 1.5rem; }
     .about-text p { color: var(--text-muted); margin-bottom: 1rem; }
+    .about-text .about-image--inline + p { margin-top: 2rem; }
     .about-text p strong { color: var(--text); }
 
     .about-features {
@@ -775,6 +794,82 @@
     }
     .tc-close-hint { display: none; }
 
+    /* ── Mobile Card Overlay ── */
+    #mobile-card-overlay {
+      display: none;
+    }
+    @media (max-width: 560px) {
+      #mobile-card-overlay {
+        display: flex;
+        position: fixed;
+        inset: 0;
+        z-index: 400;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,.55);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        padding: 10%;
+        padding-top: calc(70px + 5%);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .39s, visibility .39s;
+      }
+      #mobile-card-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+      @keyframes card-flip-in {
+        0%   { transform: rotateY(90deg) scale(0.4); opacity: 0; }
+        100% { transform: rotateY(0deg)  scale(1);   opacity: 1; }
+      }
+      @keyframes card-flip-out {
+        0%   { transform: rotateY(0deg)  scale(1);   opacity: 1; }
+        100% { transform: rotateY(90deg) scale(0.4); opacity: 0; }
+      }
+      #mobile-card-overlay.open .mobile-card-box {
+        animation: card-flip-in .39s cubic-bezier(.4,0,.2,1) forwards;
+      }
+      #mobile-card-overlay.closing .mobile-card-box {
+        animation: card-flip-out .39s cubic-bezier(.4,0,.2,1) forwards;
+      }
+      .mobile-card-box {
+        background: var(--yellow-lt);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+      }
+      html.dark .mobile-card-box { background: rgba(255,215,64,.12); }
+      .mobile-card-scroll {
+        flex: 1;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--orange) rgba(255,107,53,.18);
+      }
+      .mobile-card-scroll::-webkit-scrollbar { width: 6px; }
+      .mobile-card-scroll::-webkit-scrollbar-track { background: rgba(255,107,53,.18); border-radius: 3px; }
+      .mobile-card-scroll::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+      .mobile-card-text {
+        font-size: .92rem;
+        line-height: 1.65;
+        color: var(--text);
+        font-style: italic;
+        white-space: pre-line;
+      }
+      .mobile-card-author {
+        font-size: .82rem;
+        font-weight: 700;
+        color: var(--orange);
+        margin-top: .9rem;
+        flex-shrink: 0;
+      }
+    }
+
     html.dark .tc-front { background: #1A1A2E; border-color: #2A2A44; }
     html.dark .tc-back  { background: rgba(255,215,64,.1); }
     html.dark .tc-fade  { background: linear-gradient(to bottom, transparent, #1A1A2E); }
@@ -965,8 +1060,7 @@
       .hero-title { font-size: 2.4rem; }
       .hero-desc { font-size: 1rem; }
 
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .about-image { display: none; }
+      .about-grid { gap: 0; }
 
       .steps-grid { grid-template-columns: 1fr; }
       .steps-grid::before { display: none; }
@@ -1166,17 +1260,16 @@
   <section class="section section--alt" id="ueber-mich">
     <div class="container">
       <div class="about-grid">
-        <div class="about-image">
-          <img src="images/me.jpg" alt="Johannes – ADHS Coach" />
-          <div class="about-badge">
-            <div class="years">9+</div>
-            <div class="label">Jahre Erfahrung</div>
-          </div>
-        </div>
-
         <div class="about-text">
           <span class="section-label">Hallo, ich bin Johannes</span>
           <h2>Ein Coach, der selbst weiß, wie sich ADHS anfühlt.</h2>
+          <div class="about-image about-image--inline">
+            <img src="images/me.jpg" alt="Johannes – ADHS Coach" />
+            <div class="about-badge about-badge--inline">
+              <div class="years">9+</div>
+              <div class="label">Jahre Erfahrung</div>
+            </div>
+          </div>
 
           <p>
             Ich bin Coach für ADHS-Betroffene – mit einem <strong>ganzheitlichen Ansatz</strong> aus
@@ -1591,6 +1684,16 @@ Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und 
     </div>
   </footer>
 
+  <!-- ══ MOBILE CARD OVERLAY ══ -->
+  <div id="mobile-card-overlay" onclick="closeMobileCard()">
+    <div class="mobile-card-box" onclick="closeMobileCard()">
+      <div class="mobile-card-scroll">
+        <p class="mobile-card-text" id="mobile-card-text"></p>
+      </div>
+      <div class="mobile-card-author" id="mobile-card-author"></div>
+    </div>
+  </div>
+
   <!-- ══ MODAL: ANGEBOT ══ -->
   <div class="modal-overlay" id="modal-angebot" role="dialog" aria-modal="true">
     <div class="modal">
@@ -1782,9 +1885,38 @@ Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und 
 
     // ── Flip Cards ──
     let _wasDrag = false;
+    let _openCard = null;
+
+    function openMobileCard(card) {
+      const text   = card.querySelector('.tc-back-text').textContent;
+      const author = card.querySelector('.tc-back-author').textContent;
+      document.getElementById('mobile-card-text').textContent   = text;
+      document.getElementById('mobile-card-author').textContent = author;
+      document.getElementById('mobile-card-overlay').classList.add('open');
+      document.querySelector('.mobile-card-scroll').scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      _openCard = card;
+    }
+
+    function closeMobileCard() {
+      const overlay = document.getElementById('mobile-card-overlay');
+      if (!overlay.classList.contains('open')) return;
+      overlay.classList.add('closing');
+      overlay.classList.remove('open');
+      overlay.addEventListener('animationend', () => {
+        overlay.classList.remove('closing');
+        document.body.style.overflow = '';
+        _openCard = null;
+      }, { once: true });
+    }
+
     function flipCard(e, card) {
       if (_wasDrag) return;
-      card.classList.toggle('flipped');
+      if (window.innerWidth <= 560) {
+        if (_openCard === card) { closeMobileCard(); } else { openMobileCard(card); }
+      } else {
+        card.classList.toggle('flipped');
+      }
     }
 
     function unflipAll() {
@@ -1942,6 +2074,7 @@ Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und 
       el.addEventListener('click', () => {
         burger.classList.remove('open');
         mobileMenu.classList.remove('open');
+        closeMobileCard();
       });
     });
   </script>
