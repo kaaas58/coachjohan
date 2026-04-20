@@ -799,9 +799,12 @@
       transition: background .2s, border-color .2s, color .2s, transform .15s;
       box-shadow: var(--shadow);
     }
-    .carousel-btn:hover { background: var(--orange); border-color: var(--orange); color: #fff; transform: scale(1.08); }
+    @media (hover: hover) {
+      .carousel-btn:hover { background: var(--orange); border-color: var(--orange); color: #fff; transform: scale(1.08); }
+      html.dark .carousel-btn:hover { background: var(--orange); border-color: var(--orange); color: #fff; }
+    }
+    .carousel-btn:focus { outline: none; }
     html.dark .carousel-btn { background: #1A1A2E; border-color: #2A2A44; color: #EEEAF4; }
-    html.dark .carousel-btn:hover { background: var(--orange); border-color: var(--orange); color: #fff; }
 
     .testimonials-cta { text-align: center; margin-top: 3.5rem; }
     .testimonials-cta p { font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; }
@@ -1852,8 +1855,8 @@ Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und 
 
       moveTo(0, false);
 
-      nextBtn.addEventListener('click', next);
-      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', () => { next(); nextBtn.blur(); });
+      prevBtn.addEventListener('click', () => { prev(); prevBtn.blur(); });
       window.addEventListener('resize', () => moveTo(idx, false));
 
       // ── Drag (mouse) ──
