@@ -589,7 +589,7 @@
       transition: transform .2s, box-shadow .2s;
       background: var(--white);
     }
-    .offering-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .offering-card:hover { transform: none; box-shadow: var(--shadow); }
     .offering-card.featured {
       background: linear-gradient(160deg, var(--navy) 0%, #2d2d5e 100%);
       color: var(--white);
@@ -650,42 +650,122 @@
       user-select: none;
     }
     .carousel-track:active { cursor: grabbing; }
+
+    /* ── Flip Cards ── */
     .testimonial-card {
       flex: 0 0 calc((100% - 3rem) / 3);
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      border-top: 4px solid var(--yellow);
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      height: 250px;
+      perspective: 1000px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: height .55s cubic-bezier(.4,0,.2,1);
+      background: transparent;
     }
+    .testimonial-card.flipped { height: 300px; }
     @media (max-width: 900px) {
       .testimonial-card { flex: 0 0 calc((100% - 1.5rem) / 2); }
     }
     @media (max-width: 560px) {
-      .testimonial-card {
-        flex: 0 0 100%;
-        font-size: .83rem;
-        padding: 1.66rem;
-      }
-      .testimonial-stars { font-size: .83rem; }
-      .testimonial-avatar { width: 37px; height: 37px; font-size: .79rem; }
+      .testimonial-card { flex: 0 0 90%; height: 230px; }
+      .testimonial-card.flipped { height: 276px; }
     }
-    .testimonial-stars { color: var(--yellow); font-size: 1rem; letter-spacing: .1em; }
-    .testimonial-text { font-size: .97rem; color: var(--text); line-height: 1.7; font-style: italic; flex: 1; }
-    .testimonial-author { display: flex; align-items: center; gap: .75rem; }
-    .testimonial-avatar {
-      width: 44px; height: 44px;
+
+    .tc-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      transition: transform .55s cubic-bezier(.4,0,.2,1);
+      transform-style: preserve-3d;
+      background: transparent;
+    }
+    .testimonial-card.flipped .tc-inner { transform: rotateY(180deg); }
+
+    .tc-front, .tc-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: 1.4rem 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--border);
+    }
+    .tc-front {
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+    }
+    .tc-back {
+      background: var(--yellow-lt);
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tc-text-wrap {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+    }
+    .tc-text {
+      font-size: .9rem;
+      line-height: 1.6;
+      color: var(--text);
+      font-style: italic;
+    }
+    .tc-fade {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3rem;
+      background: linear-gradient(to bottom, transparent, var(--white));
+      pointer-events: none;
+    }
+
+    .tc-author {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-top: .65rem;
+      padding-top: .65rem;
+      border-top: 1.5px solid var(--border);
+      flex-shrink: 0;
+    }
+    .tc-avatar {
+      width: 36px; height: 36px;
       border-radius: 50%;
       background: var(--yellow-lt);
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; color: var(--orange); font-size: .95rem;
+      font-weight: 800; color: var(--orange); font-size: .85rem;
       flex-shrink: 0;
     }
-    .testimonial-name { font-weight: 700; font-size: .9rem; }
-    .testimonial-meta { font-size: .8rem; color: var(--text-muted); }
+    .tc-name { font-weight: 700; font-size: .85rem; color: var(--text); line-height: 1.2; }
+    .tc-location { font-size: .75rem; color: var(--text-muted); }
+    .tc-hint { display: none; }
+
+    .tc-back-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: .4rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange) rgba(255,107,53,.1);
+    }
+    .tc-back-scroll::-webkit-scrollbar { width: 6px; }
+    .tc-back-scroll::-webkit-scrollbar-track { background: rgba(255,107,53,.1); border-radius: 3px; }
+    .tc-back-scroll::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+    .tc-back-text {
+      font-size: .88rem; line-height: 1.65;
+      color: var(--text); font-style: italic;
+      white-space: pre-line;
+    }
+    .tc-back-author {
+      font-size: .8rem; font-weight: 700;
+      color: var(--orange); margin-top: .75rem; flex-shrink: 0;
+    }
+    .tc-close-hint { display: none; }
+
+    html.dark .tc-front { background: #1A1A2E; border-color: #2A2A44; }
+    html.dark .tc-back  { background: rgba(255,215,64,.1); }
+    html.dark .tc-fade  { background: linear-gradient(to bottom, transparent, #1A1A2E); }
+    html.dark .tc-author { border-top-color: #2A2A44; }
 
     .carousel-controls {
       display: flex;
@@ -1223,57 +1303,219 @@
       <div class="carousel-wrapper">
         <div class="carousel-track" id="carousel-track">
 
-          <div class="testimonial-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">„Endlich jemand, der wirklich versteht, wie mein Kopf funktioniert. Die 12 Wochen haben mein Leben grundlegend verändert."</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">M</div>
-              <div><div class="testimonial-name">Markus T.</div><div class="testimonial-meta">12-Wochen Fundamentals</div></div>
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">M</div>
+                  <div><div class="tc-name">M. K.</div><div class="tc-location">Aus Berlin</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">M. K. · Aus Berlin</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
             </div>
           </div>
 
-          <div class="testimonial-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">„Johann ist kein typischer Coach. Er kennt das Leben, kennt ADHS – aus eigener Erfahrung. Das macht den riesigen Unterschied."</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">S</div>
-              <div><div class="testimonial-name">Sarah K.</div><div class="testimonial-meta">1:1 Coaching</div></div>
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">T</div>
+                  <div><div class="tc-name">T. L.</div><div class="tc-location">Aus München</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">T. L. · Aus München</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
             </div>
           </div>
 
-          <div class="testimonial-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">„Das Retreat in Rio war eine einmalige Erfahrung – intensiv, ehrlich und wirklich transformativ. Ich habe mich selbst neu kennengelernt."</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">F</div>
-              <div><div class="testimonial-name">Felix R.</div><div class="testimonial-meta">Coaching-Retreat Rio</div></div>
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">A</div>
+                  <div><div class="tc-name">A. P.</div><div class="tc-location">Aus Mainz</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">A. P. · Aus Mainz</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
             </div>
           </div>
 
-          <div class="testimonial-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">„Ich habe endlich aufgehört, mich zu schämen. Johann hat mir gezeigt, dass mein ADHS keine Schwäche ist – sondern ein Werkzeug."</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">L</div>
-              <div><div class="testimonial-name">Lisa M.</div><div class="testimonial-meta">12-Wochen Fundamentals</div></div>
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">S</div>
+                  <div><div class="tc-name">S. W.</div><div class="tc-location">Aus Hamburg</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">S. W. · Aus Hamburg</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
             </div>
           </div>
 
-          <div class="testimonial-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">„Endlich Struktur, die sich nicht wie ein Käfig anfühlt. Ich schlafe besser, arbeite fokussierter und bin viel ausgeglichener."</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">T</div>
-              <div><div class="testimonial-name">Thomas H.</div><div class="testimonial-meta">1:1 Coaching</div></div>
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">R</div>
+                  <div><div class="tc-name">R. J.</div><div class="tc-location">Aus Köln</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">R. J. · Aus Köln</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
             </div>
           </div>
 
-          <div class="testimonial-card">
-            <div class="testimonial-stars">★★★★★</div>
-            <p class="testimonial-text">„Nach Jahren des Chaos habe ich zum ersten Mal das Gefühl, mein Leben selbst in der Hand zu haben. Danke, Johann."</p>
-            <div class="testimonial-author">
-              <div class="testimonial-avatar">A</div>
-              <div><div class="testimonial-name">Anna W.</div><div class="testimonial-meta">12-Wochen Fundamentals</div></div>
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">J</div>
+                  <div><div class="tc-name">J. N.</div><div class="tc-location">Aus Frankfurt</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">J. N. · Aus Frankfurt</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">C</div>
+                  <div><div class="tc-name">C. D.</div><div class="tc-location">Aus Dresden</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">C. D. · Aus Dresden</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card" onclick="flipCard(event, this)">
+            <div class="tc-inner">
+              <div class="tc-front">
+                <div class="tc-text-wrap">
+                  <p class="tc-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten…"</p>
+                  <div class="tc-fade"></div>
+                </div>
+                <div class="tc-author">
+                  <div class="tc-avatar">K</div>
+                  <div><div class="tc-name">K. B.</div><div class="tc-location">Aus Stuttgart</div></div>
+                </div>
+                <div class="tc-hint">Klicken zum Lesen →</div>
+              </div>
+              <div class="tc-back">
+                <div class="tc-back-scroll">
+                  <p class="tc-back-text">„Als ich zu Johann kam, hatte ich eigentlich schon aufgegeben zu glauben, dass sich an meinem Chaos nochmal was ändert. ADHS, Aufschieberitis, das ständige Gefühl, nicht gut genug zu sein – ich hatte vieles probiert, aber nichts hat wirklich gehalten.
+
+Johannes arbeitet nicht mit Schablonen. Wir haben zusammen eine Struktur entwickelt, die zu mir und meinem Kopf passt – nicht umgekehrt. Und nebenbei sind wir an Stellen gelandet, mit denen ich so gar nicht gerechnet hatte: mein Impostersyndrom, mein Selbstwert, und warum es mir so schwerfiel, in Beziehungen für mich einzustehen. Ehrlich, mit Humor, immer auf Augenhöhe – und wenn's sein musste, auch unbequem.
+
+Heute habe ich meine Symptome im Griff, statt dass sie mich im Griff haben. Und ich kämpfe nicht mehr gegen mich selbst."</p>
+                </div>
+                <div class="tc-back-author">K. B. · Aus Stuttgart</div>
+                <div class="tc-close-hint">← Klicken zum Schließen</div>
+              </div>
             </div>
           </div>
 
@@ -1522,6 +1764,18 @@
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     });
 
+    // ── Flip Cards ──
+    let _wasDrag = false;
+    function flipCard(e, card) {
+      if (_wasDrag) return;
+      card.classList.toggle('flipped');
+    }
+
+    function unflipAll() {
+      document.querySelectorAll('.testimonial-card.flipped').forEach(c => c.classList.remove('flipped'));
+    }
+
+
     // ── Carousel ──
     (function () {
       const track    = document.getElementById('carousel-track');
@@ -1557,6 +1811,7 @@
       }
 
       function next() {
+        unflipAll();
         moveTo(idx + 1, true);
         if (idx >= origCards.length) {
           track.addEventListener('transitionend', function reset() {
@@ -1567,6 +1822,7 @@
       }
 
       function prev() {
+        unflipAll();
         if (idx <= 0) {
           moveTo(origCards.length, false);
           requestAnimationFrame(() => requestAnimationFrame(() => moveTo(origCards.length - 1, true)));
@@ -1585,7 +1841,8 @@
       let dragStartX = 0, dragging = false, dragDelta = 0;
 
       track.addEventListener('mousedown', e => {
-        dragging  = true;
+        dragging   = true;
+        _wasDrag   = false;
         dragStartX = e.clientX;
         dragDelta  = 0;
         track.style.transition = 'none';
@@ -1595,6 +1852,7 @@
       window.addEventListener('mousemove', e => {
         if (!dragging) return;
         dragDelta = e.clientX - dragStartX;
+        if (Math.abs(dragDelta) > 6) _wasDrag = true;
         track.style.transform = `translateX(${-idx * step() + dragDelta}px)`;
       });
 
@@ -1603,9 +1861,10 @@
         dragging = false;
         track.style.cursor = '';
         const threshold = step() * 0.25;
-        if (dragDelta < -threshold)      next();
-        else if (dragDelta > threshold)  prev();
+        if (dragDelta < -threshold)      { unflipAll(); next(); }
+        else if (dragDelta > threshold)  { unflipAll(); prev(); }
         else                             moveTo(idx, true);
+        setTimeout(() => { _wasDrag = false; }, 0);
       });
 
       // ── Touch ──
@@ -1624,8 +1883,8 @@
 
       track.addEventListener('touchend', () => {
         const threshold = step() * 0.25;
-        if (touchDelta < -threshold)     next();
-        else if (touchDelta > threshold) prev();
+        if (touchDelta < -threshold)     { unflipAll(); next(); }
+        else if (touchDelta > threshold) { unflipAll(); prev(); }
         else                             moveTo(idx, true);
       });
     })();
