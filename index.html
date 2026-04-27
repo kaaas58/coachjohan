@@ -722,6 +722,8 @@
       background: transparent;
     }
     .testimonial-card.flipped .tc-inner { transform: rotateY(180deg); }
+    /* Firefox fix: backface-visibility breaks when a child has overflow:auto inside preserve-3d */
+    .testimonial-card.flipped .tc-front { visibility: hidden; }
 
     .tc-front, .tc-back {
       position: absolute;
