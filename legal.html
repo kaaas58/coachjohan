@@ -157,6 +157,16 @@
     .contact-row { display: flex; gap: .6rem; align-items: center; font-size: .92rem; color: var(--text-muted); margin-bottom: .4rem; }
     .contact-row i { color: var(--orange); width: 16px; text-align: center; }
 
+    .info-box {
+      background: rgba(255,107,53,.07);
+      border-left: 3px solid var(--orange);
+      border-radius: 8px;
+      padding: .9rem 1.1rem;
+      margin: .75rem 0;
+    }
+    html.dark .info-box { background: rgba(255,107,53,.12); }
+    .info-box p { font-size: .9rem; margin-bottom: 0 !important; }
+
     /* Footer */
     footer { background: var(--navy); color: rgba(255,255,255,.5); padding: 2rem 0; text-align: center; font-size: .85rem; }
     footer a { color: rgba(255,255,255,.5); text-decoration: none; margin-inline: .5rem; }
@@ -220,6 +230,20 @@
           <div class="legal-card">
             <h3><i class="fa-solid fa-handshake-slash"></i> Streitbeilegung</h3>
             <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+          </div>
+
+          <div class="legal-card" id="kontaktformular">
+            <h3>Kontaktformular &amp; Drittanbieter-Formulardienst</h3>
+            <p>Auf dieser Website steht ein Kontaktformular zur Verfügung. Wenn Sie das Formular ausfüllen und absenden, werden die von Ihnen eingegebenen Daten (Name, E-Mail-Adresse, Nachricht) zur Übermittlung an uns verarbeitet.</p>
+            <p>Für die technische Zustellung der Formularnachrichten nutzen wir den Dienst <strong>FormSubmit</strong> (formsubmit.co). Dabei werden Ihre Formulardaten zur Weiterleitung an unsere E-Mail-Adresse an die Server von FormSubmit übertragen. FormSubmit agiert in diesem Zusammenhang als Auftragsverarbeiter gemäß Art. 28 DSGVO.</p>
+            <div class="info-box">
+              <p><strong>Dienstanbieter:</strong> FormSubmit · formsubmit.co<br>
+              <strong>Zweck:</strong> Technische Übermittlung von Kontaktanfragen<br>
+              <strong>Übertragene Daten:</strong> Name, E-Mail-Adresse, Nachrichteninhalt<br>
+              <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen) sowie Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Kontaktaufnahme)<br>
+              <strong>Speicherdauer:</strong> Die Daten werden gelöscht, sobald die Anfrage abschließend bearbeitet wurde.</p>
+            </div>
+            <p>Die Nutzung des Kontaktformulars ist freiwillig. Alternativ können Sie uns jederzeit direkt per E-Mail unter <a href="mailto:johannes.litty@gmail.com">johannes.litty@gmail.com</a> kontaktieren, ohne dass Ihre Daten einen Drittanbieter durchlaufen.</p>
           </div>
 
         </div>
