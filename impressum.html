@@ -301,12 +301,13 @@
 
   <footer>
     <p>
-      © 2025 Johannes Litty · ADHS Coach Johann &nbsp;·&nbsp;
+      © <span id="copy-year"></span> Johannes Litty · ADHS Coach Johann &nbsp;·&nbsp;
       <a href="impressum.html#datenschutz">Datenschutz</a>
       <a href="impressum.html#impressum">Impressum</a>
       <a href="index.html">Startseite</a>
     </p>
   </footer>
+  <script>document.getElementById('copy-year').textContent = new Date().getFullYear();</script>
 
   <script>
     const themeToggle = document.getElementById('theme-toggle');
