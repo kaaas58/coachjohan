@@ -1809,11 +1809,11 @@ Ich bin froh mich an Johannes gewandt zu haben und blicke mit Vorfreude auf mein
       <h2>Jetzt anfragen</h2>
       <p class="modal-sub">Ich melde mich in der Regel innerhalb von 24h bei dir.</p>
 
-      <form id="form-angebot" onsubmit="submitForm(event,'angebot')">
-        <input type="hidden" name="_subject" value="Neue Anfrage – ADHS Coach Johann">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Vielen Dank für deine Anfrage! Deine Nachricht ist bei mir angekommen. Ich melde mich in der Regel innerhalb von 24 Stunden bei dir. Bis bald, Johann">
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="eb33fe22-aac6-4374-97b2-a477535179e3">
+        <input type="hidden" name="subject" value="Neue Anfrage – ADHS Coach Johann">
+        <input type="hidden" name="from_name" value="coachjohann.de">
+        <input type="hidden" name="redirect" value="https://coachjohann.de/danke.html">
 
         <div class="form-group">
           <label for="angebot-name">Name</label>
@@ -1867,11 +1867,11 @@ Ich bin froh mich an Johannes gewandt zu haben und blicke mit Vorfreude auf mein
       <h2>Erstgespräch vereinbaren</h2>
       <p class="modal-sub">Kostenlos &amp; unverbindlich – ich freue mich auf dich.</p>
 
-      <form id="form-erstgespraech" onsubmit="submitForm(event,'erstgespraech')">
-        <input type="hidden" name="_subject" value="Erstgespräch-Anfrage – ADHS Coach Johann">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_autoresponse" value="Vielen Dank für dein Interesse an einem Erstgespräch! Deine Anfrage ist bei mir angekommen. Ich melde mich in Kürze bei dir, um einen gemeinsamen Termin zu finden. Bis bald, Johann">
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="eb33fe22-aac6-4374-97b2-a477535179e3">
+        <input type="hidden" name="subject" value="Erstgespräch-Anfrage – ADHS Coach Johann">
+        <input type="hidden" name="from_name" value="coachjohann.de">
+        <input type="hidden" name="redirect" value="https://coachjohann.de/danke.html">
 
         <div class="form-group">
           <label for="eg-name">Name</label>
@@ -1906,8 +1906,6 @@ Ich bin froh mich an Johannes gewandt zu haben und blicke mit Vorfreude auf mein
 
   <script>
     // ── Modals ──
-    const FORMSUBMIT_URL = 'https://formsubmit.co/ajax/johannes.litty@gmail.com';
-
     const radioMap = {
       coaching11: 'rl-coaching11',
       wochen12:   'rl-wochen12',
@@ -1959,35 +1957,6 @@ Ich bin froh mich an Johannes gewandt zu haben und blicke mit Vorfreude auf mein
         lbl.classList.add('selected');
       });
     });
-
-    async function submitForm(e, type) {
-      e.preventDefault();
-      const form = document.getElementById('form-' + type);
-      const btn  = form.querySelector('.form-submit-btn');
-      btn.disabled = true;
-      btn.textContent = 'Wird gesendet…';
-
-      try {
-        const fd = new FormData(form);
-        const data = {};
-        fd.forEach((v, k) => { data[k] = v; });
-        const res = await fetch(FORMSUBMIT_URL, {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        });
-        if (res.ok) {
-          form.style.display = 'none';
-          document.getElementById('success-' + type).classList.add('show');
-          setTimeout(() => closeModal(type), 3000);
-        } else {
-          throw new Error();
-        }
-      } catch {
-        btn.disabled = false;
-        btn.textContent = 'Fehler – nochmal versuchen';
-      }
-    }
 
     // ── Dark Mode ──
     const themeToggle = document.getElementById('theme-toggle');
